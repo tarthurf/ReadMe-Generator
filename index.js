@@ -29,7 +29,7 @@ async function readMeGenerator() {
                     userEmail = accRes.data.email;
                     console.log(accRes.data.email);
                 });
-
+                
                 // Grabs detailed list of user repos
                 axios.get(repoQueryUrl).then(repoRes => {
                     // console.log(repoRes.data);
@@ -44,17 +44,12 @@ async function readMeGenerator() {
                         type: "list",
                         name: "repo",
                         message: "Which repo do you want to use?",
-                        choices: (repoNames)
-                    },
-                    {   
-                        type: "confirm",
-                        name: "Description",
-                        message: "Do you want to write a description?"
+                        choices: repoNames
                     }
-                ])).then((repo) => {
+                ])).then(res => {
                     // TODO: Use repoNames array with iqnuirer to let user choose which repo they want to create readMe for
                     const newReadMe = `
-                    # ${repo}\n\n
+                    # ${res.repo}\n\n
                     ## Description\n\n
                     ## Table Of Contents:\n\n
                     *Installation\n
@@ -73,6 +68,9 @@ async function readMeGenerator() {
 
                     `
                 })
+            .catch(function(err) {
+                console.log(err);
+            })
         });
         // fs.writeFileSync()
     }
