@@ -27,7 +27,7 @@ async function readMeGenerator() {
                     userAvatar = accRes.data.avatar_url; 
                     console.log(userAvatar);
                     userEmail = accRes.data.email;
-                    console.log(userEmail);
+                    console.log(accRes.data.email);
                 });
 
                 // Grabs detailed list of user repos
@@ -35,12 +35,46 @@ async function readMeGenerator() {
                     // console.log(repoRes.data);
                     
                     repoNames = repoRes.data.map(repo => { // Creates array of repo names for user to select later
+                        console.log(repo.name);
                         return repo.name;
                     });
-                    console.log(repoNames);
-            });
-            // TODO: Use repoNames array with iqnuirer to let user choose which repo they want to create readMe for
+
+                }).then(inquirer.prompt([
+                    {
+                        type: "list",
+                        name: "repo",
+                        message: "Which repo do you want to use?",
+                        choices: (repoNames)
+                    },
+                    {   
+                        type: "confirm",
+                        name: "Description",
+                        message: "Do you want to write a description?"
+                    }
+                ])).then((repo) => {
+                    // TODO: Use repoNames array with iqnuirer to let user choose which repo they want to create readMe for
+                    const newReadMe = `
+                    # ${repo}\n\n
+                    ## Description\n\n
+                    ## Table Of Contents:\n\n
+                    *Installation\n
+                    *Usage\n
+                    *License\n
+                    *Contributing\n
+                    *Tests\n
+                    *Questions\n\n
+                    
+                    ##Installation\n\n
+                    ##Usage\n\n
+                    ##License\n\n
+                    ##Contributing\n\n
+                    ##Tests\n\n
+                    ##Questions\n\n
+
+                    `
+                })
         });
+        // fs.writeFileSync()
     }
     catch(err) {
         console.log(err)
